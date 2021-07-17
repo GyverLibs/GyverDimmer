@@ -12,12 +12,13 @@
 
     Версии:
     v1.0 - релиз
+    v1.1 - переделан FastIO
 */
 
 #ifndef GyverDimmer_h
 #define GyverDimmer_h
 #include <Arduino.h>
-#include "FastIO.h"
+#include "FastIO_v2.h"
 
 // брезенхем одноканальный
 template < uint8_t _D_PIN >
@@ -25,14 +26,14 @@ class DimmerBres {
 public:
     DimmerBres() {
         pinMode(_D_PIN, OUTPUT);
-        fastWrite(_D_PIN, LOW);
+        F_fastWrite(_D_PIN, LOW);
     }
     void write(uint8_t dim) {
         dimmer = dim;
     }
     void tick() {		
         int val = ((uint16_t)++count * dimmer) >> 9;		
-        if (lastVal != (val != last)) fastWrite(_D_PIN, val != last);
+        if (lastVal != (val != last)) F_fastWrite(_D_PIN, val != last);
         lastVal = (val != last);
         last = val;
     }
@@ -55,7 +56,7 @@ public:
         count++;
         for (byte i = 0; i < _D_AMOUNT; i++) {
             int val = ((uint16_t)count * dimmer[i]) >> 9;
-            if (lastState[i] != (val != last[i])) fastWrite(dimPins[i], val != last[i]);
+            if (lastState[i] != (val != last[i])) F_fastWrite(dimPins[i], val != last[i]);
             lastState[i] = (val != last[i]);
             last[i] = val;
         }
@@ -70,7 +71,7 @@ class Dimmer {
 public:
     Dimmer(uint8_t freq = 50) {
         pinMode(_D_PIN, OUTPUT);
-        fastWrite(_D_PIN, LOW);
+        F_fastWrite(_D_PIN, LOW);
         if (freq == 50) maxVal = 9300;
         else maxVal = 7600;
     }
@@ -78,7 +79,7 @@ public:
         dimmer = map(dim, 0, 255, maxVal, 500);
     }
     bool tickZero() {
-        fastWrite(_D_PIN, LOW);
+        F_fastWrite(_D_PIN, LOW);
         if (lastDim != dimmer) {
             lastDim = dimmer;
             return true;
@@ -86,7 +87,7 @@ public:
         return false;
     }
     void tickTimer() {
-        fastWrite(_D_PIN, HIGH);
+        F_fastWrite(_D_PIN, HIGH);
     }
     int getPeriod() {
         return dimmer;
@@ -117,8 +118,8 @@ public:
     }
     void tickTimer() {
         for (byte i = 0; i < _D_AMOUNT; i++) {
-            if (counter == dimmer[i]) fastWrite(dimPins[i], 1);  			// на текущем тике включаем
-            else if (counter == dimmer[i] - 1) fastWrite(dimPins[i], 0);  	// на следующем выключаем
+            if (counter == dimmer[i]) F_fastWrite(dimPins[i], 1);  			// на текущем тике включаем
+            else if (counter == dimmer[i] - 1) F_fastWrite(dimPins[i], 0);  	// на следующем выключаем
         }
         counter--;
     }
