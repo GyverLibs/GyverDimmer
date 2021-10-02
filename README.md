@@ -97,6 +97,7 @@ void loop() {
 - v1.0
 - v1.1 - переделан FastIO
 - v1.1.1 - убран FastIO
+- v1.2 - исправил баг в DimmerBres и DimmerBresMulti
 
 <a id="feedback"></a>
 ## Баги и обратная связь

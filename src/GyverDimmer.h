@@ -14,6 +14,7 @@
     v1.0 - релиз
     v1.1 - переделан FastIO
     v1.1.1 - убран FastIO
+    v1.2 - исправил баг в DimmerBres и DimmerBresMulti
 */
 
 #ifndef GyverDimmer_h
@@ -32,7 +33,7 @@ public:
         dimmer = dim;
     }
     void tick() {		
-        int val = ((uint16_t)++count * dimmer) >> 9;		
+        int val = ((uint16_t)++count * dimmer) >> 8;		
         if (lastVal != (val != last)) fastWrite(_D_PIN, val != last);
         lastVal = (val != last);
         last = val;
@@ -66,7 +67,7 @@ public:
     void tick() {		
         count++;
         for (byte i = 0; i < _D_AMOUNT; i++) {
-            int val = ((uint16_t)count * dimmer[i]) >> 9;
+            int val = ((uint16_t)count * dimmer[i]) >> 8;
             if (lastState[i] != (val != last[i])) fastWrite(dimPins[i], val != last[i]);
             lastState[i] = (val != last[i]);
             last[i] = val;
