@@ -1,3 +1,5 @@
+This is an automatic translation, may be incorrect in some places. See sources and examples!
+
 # GyverDimmer
 Triac dimmer control library with Arduino
 - Single and multi-channel Bresenham dimmer
