@@ -147,7 +147,7 @@ public:
     void write(uint8_t ch, uint8_t dim) {
         dimmer[ch] = dim;
     }
-    bool tickZero() {
+    void tickZero() {
         counter = 255;
     }
     void tickTimer() {
